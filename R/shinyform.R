@@ -33,6 +33,14 @@ labelMandatory <- function(label) {
   )
 }
 
+likert_scale <- c("Strongly Disagree",
+                  "Disagree",
+                  "Neither Agree nor Disagree",
+                  "Agree",
+                  "Strongly Agree")
+
+preferNot <- "Prefer not to say"
+NotApplicable <- "Not Applicable"
 
 
 # shinyform app defined CSS format
@@ -137,6 +145,7 @@ loadDataGsheets <- function() {
 #' Creates the UI form component for shinyforms. 
 #'
 #' @param formInfo A list with param: id, questions and storage 
+#' @importFrom shinyWidgets sliderTextInput
 #' 
 #' @examples  
 #' if (interactive()) {
@@ -215,11 +224,25 @@ formUI <- function(formInfo) {
               input <- numericInput(ns(question$id), NULL, 0)
             } else if (question$type == "checkbox") {
               input <- checkboxInput(ns(question$id), label, FALSE)
+            } else if (question$type == "yesno") {
+              input <- radioButtons(ns(question$id), label, c("Yes", "No"))
+            } else if (question$type == "yesnoNA") {
+              input <- radioButtons(ns(question$id), label, c("Yes", "No", "NA"))
+            } else if (question$type == "yesnoNAPreferNot") {
+              input <- radioButtons(ns(question$id), label, c("Yes", "No", "NA", "Prefer Not to say"))
+            } else if (question$type == "likert") {
+              input <- sliderTextInput(ns(question$id), label, likert_scale, likert_scale[3])
+            } else if (question$type == "likertNA") {
+              input <- sliderTextInput(ns(question$id), label, c(likert_scale, NotApplicable), likert_scale[3])
+            } else if (question$type == "likertNAPreferNot") {
+              input <- sliderTextInput(ns(question$id), label, c(likert_scale, NotApplicable, preferNot), likert_scale[3])
             }
 
             div(
               class = "sf-question",
-              if (question$type != "checkbox") {
+              if (!question$type %in% c("checkbox", "yesno", "yesnoNA",
+                                        "yesnoNAPreferNot", "likert", "likertNA",
+                                        "likertNAPreferNot")) {
                 tags$label(
                   `for` = ns(question$id),
                   class = "sf-input-label",
