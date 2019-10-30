@@ -96,6 +96,8 @@ loadData <- function(storage) {
 saveDataFlatfile <- function(data, storage) {
   fileName <- paste0(
     paste(
+      digest::digest(Sys.info()[["user"]], algo = "xxhash32"),
+      "_",
       format(Sys.time(), "%Y%m%d-%H%M%OS"),
       digest::digest(data, algo = "md5"),
       sep = "_"
@@ -457,7 +459,7 @@ formServerHelper <- function(input, output, session, formInfo) {
   # Gather all the form inputs (and add timestamp)
   formData <- reactive({
     data <- sapply(fieldsAll, function(x) input[[x]])
-    data <- c(data, timestamp = as.integer(Sys.time()))
+    data <- c(data, timestamp = as.integer(Sys.time()), user_hash = digest::digest(Sys.info()[["user"]], algo = "xxhash32"))
     data <- t(data)
     data
   }) 
