@@ -222,6 +222,8 @@ formUI <- function(formInfo) {
             
             if (question$type == "text") {
               input <- textInput(ns(question$id), NULL, "")
+            } else if (question$type == "comments") {
+              input <- textAreaInput(ns(question$id), NULL, "", height = "100px", width = "350px")
             } else if (question$type == "numeric") {
               input <- numericInput(ns(question$id), NULL, 0)
             } else if (question$type == "checkbox") {
