@@ -233,11 +233,11 @@ formUI <- function(formInfo) {
             } else if (question$type == "yesnoNAPreferNot") {
               input <- radioButtons(ns(question$id), label, c("Yes", "No", "NA", "Prefer Not to say"))
             } else if (question$type == "likert") {
-              input <- sliderTextInput(ns(question$id), label, likert_scale, likert_scale[3])
+              input <- radioButtons(ns(question$id), label, likert_scale, likert_scale[3])
             } else if (question$type == "likertNA") {
-              input <- sliderTextInput(ns(question$id), label, c(likert_scale, NotApplicable), likert_scale[3])
+              input <- radioButtons(ns(question$id), label, c(likert_scale, NotApplicable), likert_scale[3])
             } else if (question$type == "likertNAPreferNot") {
-              input <- sliderTextInput(ns(question$id), label, c(likert_scale, NotApplicable, preferNot), likert_scale[3])
+              input <- radioButtons(ns(question$id), label, c(likert_scale, NotApplicable, preferNot), likert_scale[3])
             }
 
             div(
